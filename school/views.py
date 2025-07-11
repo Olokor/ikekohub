@@ -11,7 +11,7 @@ from .permissions import (
     IsAdmin, IsTeacher, IsStudent, IsAdminOrTeacher,
     IsOwnerOrAdminOrTeacher, IsStudentOwnerOrParentOrTeacher
 )
-from .serializers import AdminProfileSerializer, TeacherProfileCreateSerializer
+from .serializers import AdminProfileSerializer, TeacherProfileCreateSerializer, StudentProfileCreateSerializer
 
 
 # Admin-only view
@@ -31,6 +31,16 @@ class CreateTeacherView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         teacher_data = serializer.save()
         return Response(teacher_data, status=status.HTTP_201_CREATED)
+
+class CreateStudentView(generics.CreateAPIView):
+    permission_classes = [IsAdmin]
+    serializer_class = StudentProfileCreateSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        student_data = serializer.save()
+        return Response(student_data, status=status.HTTP_201_CREATED)
 
 
 class GetAllUsersView(generics.GenericAPIView):
