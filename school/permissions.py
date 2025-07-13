@@ -1,43 +1,31 @@
 # permissions.py
 from rest_framework import permissions
-from rest_framework.permissions import BasePermission
 
 from rest_framework.permissions import BasePermission
 
 
 class IsAdmin(BasePermission):
-    """
-    Custom permission to only allow admin users.
-    """
+    """Permission for admin users within their school"""
 
     def has_permission(self, request, view):
-        print(f"=== PERMISSION DEBUG ===")
-        print(f"Request user: {request.user}")
-        print(f"User type: {type(request.user)}")
-        print(f"Is authenticated: {request.user.is_authenticated}")
-
-        # Check if user is authenticated
-        if not request.user or not request.user.is_authenticated:
-            print("❌ User not authenticated")
+        if not request.user.is_authenticated:
             return False
-
-        print(f"User attributes: {dir(request.user)}")
-        print(f"Has 'role' attribute: {hasattr(request.user, 'role')}")
 
         try:
-            if hasattr(request.user, 'role'):
-                role = request.user.role
-                print(f"Role object: {role}")
-                print(f"Role type: {role.role_type}")
-                print(f"Is admin: {role.is_admin}")
-                return role.is_admin
-            else:
-                print("❌ User has no 'role' attribute")
+            # Check if user is admin
+            if not request.user.role.is_admin:
                 return False
-        except Exception as e:
-            print(f"❌ Exception in permission check: {e}")
-            return False
 
+            # Get school from request data or user
+            user_school = request.user.school
+
+            # If creating teacher, ensure they belong to same school
+            if hasattr(request.user, 'school') and user_school:
+                return True
+
+            return False
+        except AttributeError:
+            return False
 class IsTeacher(permissions.BasePermission):
     """Permission for teacher users only"""
 
