@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure--i&2votw+g#of4y)waba3f(8llp*4ld8t0*le-ht(3vc8=80a6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -71,7 +71,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-ROOT_URLCONF = 'ikekohub.urls'
+ROOT_URLCONF = 'ikekohub.tenant_urls'
 
 TEMPLATES = [
     {
@@ -154,21 +154,29 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ACCOUNT_LOGIN_METHODS  = {
-    'username': {'required': False},
-    'email': {'required': True},
-}
-
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_SIGNUP_FIELDS = {
-    'username': {'required': False},
-    'email': {'required': True},
-}
-
+# Authentication Backends
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
+
+# Allauth Configuration
+ACCOUNT_LOGIN_METHOD = "username_email" # Allows both username and email
+ACCOUNT_SIGNUP_FIELDS = ['email', 'username']
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'  # Or your custom field
+
+# Modern signup fields configuration
+ACCOUNT_SIGNUP_FIELDS = {
+    'email': {
+        'required': True,
+        'verify': True  # Enable email verification
+    },
+    'username': {
+        'required': True,
+        'min_length': 4
+    }
+}
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -197,7 +205,7 @@ REST_AUTH = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(hours=1),
 }
 
@@ -214,3 +222,8 @@ SWAGGER_SETTINGS = {
 
 TENANT_MODEL = 'public_app.School'
 TENANT_DOMAIN_MODEL = 'public_app.Domain'
+
+PUBLIC_SCHEMA_URLCONF = 'ikekohub.public_urls'
+TENANT_URLCONF = 'ikekohub.tenant_urls'
+
+AUTH_USER_MODEL = 'public_app.TenantUser'
