@@ -67,6 +67,8 @@ class StudentProfileCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(write_only=True, required=True)
     password = serializers.CharField(write_only=True, required=True)
     school = serializers.CharField(write_only=True, required=True)
+    parent_email = serializers.EmailField(required=True)
+    parent_name = serializers.CharField(required=True, max_length=100)
     class Meta:
         model = StudentProfile
         fields = [
@@ -118,4 +120,5 @@ class StudentProfileCreateSerializer(serializers.ModelSerializer):
             'parent_contact': validated_data['parent_contact'],
             'class_level': validated_data['class_level'],
             'academic_year': validated_data['academic_year'],
+            'parent_username': student_profile.parents.first().user.username if student_profile.parents.exists() else None
         }

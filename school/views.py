@@ -43,11 +43,11 @@ class CreateStudentView(generics.CreateAPIView):
         return Response(student_data, status=status.HTTP_201_CREATED)
 
 
-class GetAllUsersView(generics.GenericAPIView):
-    permission_classes = [IsAdmin]
-    # serializer_class =
-    def get(self, request, user_role=None):
-        # if user_role:
-        #     users = get_user_model().objects.filter(role_type=user_role)
-        #     return Response({"users": users})
-        return Response({"users": get_user_model().objects.all()})
+# class GetAllUsersView(generics.GenericAPIView):
+#     permission_classes = [IsAdmin]
+#     # serializer_class =
+#     def get(self, request, user_role=None):
+#         # if user_role:
+#         #     users = get_user_model().objects.filter(role_type=user_role)
+#         #     return Response({"users": users})
+#         return Response({"users": get_user_model().objects.all()})
