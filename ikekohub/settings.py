@@ -96,13 +96,8 @@ WSGI_APPLICATION = 'ikekohub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django_tenants.postgresql_backend',
-        'NAME': 'ikekohub',
-        'USER': 'postgres',
-        'PASSWORD': 'passwd',
-        'HOST': 'localhost',
-        'PORT': 1649,
-
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
