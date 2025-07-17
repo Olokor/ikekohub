@@ -227,3 +227,6 @@ PUBLIC_SCHEMA_URLCONF = 'ikekohub.public_urls'
 TENANT_URLCONF = 'ikekohub.tenant_urls'
 
 AUTH_USER_MODEL = 'public_app.TenantUser'
+
+
+

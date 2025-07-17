@@ -1,4 +1,3 @@
-from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import generics, status
@@ -25,4 +24,3 @@ class CreateSchoolView(generics.CreateAPIView):
 
 def remove_space(string) -> str:
     return string.replace(' ', '')
-
